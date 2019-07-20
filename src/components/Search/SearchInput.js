@@ -8,6 +8,7 @@ const SearchInput = props => {
       type="search"
       value={props.currentInput}
       onChange={props.changeHandler}
+      onKeyDown={props.keyPressHandler}
       placeholder={props.placeholder}
     />
   );

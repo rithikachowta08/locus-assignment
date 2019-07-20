@@ -6,7 +6,7 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      focusedUser: 0,
+      focusedUser: -1,
       scrollIntoView: false
     };
     this.userRef = React.createRef();
@@ -22,12 +22,17 @@ class List extends Component {
   }
 
   ensureFocusedItemVisible() {
-    this.userRef.current && this.userRef.current.scrollIntoView(false); // false aligns dom node to the bottom
+    this.userRef.current &&
+      this.userRef.current.scrollIntoView({
+        behaviour: 'smooth',
+        block: 'center'
+      });
   }
 
   handleKeyPress = e => {
-    // up arrow
+    // scroll into view only on keyboard navigation
     this.setState({ scrollIntoView: true });
+    // up arrow
     if (e.keyCode === 38) {
       this.setState(state => {
         const currentFocus = state.focusedUser;
@@ -39,6 +44,8 @@ class List extends Component {
     }
     // down arrow
     if (e.keyCode === 40) {
+      console.log(e.keyCode);
+
       this.setState(state => {
         const currentFocus = state.focusedUser;
         const focusedUser =

@@ -12,6 +12,7 @@ class Search extends Component {
       currentInput: '',
       users: []
     };
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
@@ -51,9 +52,13 @@ class Search extends Component {
     }
   };
 
+  handleKeyPress = e => {
+    this.listRef.current && this.listRef.current.handleKeyPress(e);
+  };
+
   render() {
     const searchResults = this.state.users.length ? (
-      <List users={this.state.users} />
+      <List users={this.state.users} ref={this.listRef} />
     ) : (
       <EmptyResult message="No users found" />
     );
@@ -61,6 +66,7 @@ class Search extends Component {
       <div className="search-container">
         <SearchInput
           currentInput={this.state.currentInput}
+          keyPressHandler={this.handleKeyPress}
           changeHandler={this.filterByKeyword}
           placeholder="Search users by ID, address, name, items or pincode..."
         />
