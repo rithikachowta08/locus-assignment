@@ -6,13 +6,17 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      focusedUser: 0
+      focusedUser: 0,
+      scrollIntoView: false
     };
     this.userRef = React.createRef();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.focusedUser !== prevState.focusedUser) {
+    if (
+      this.state.focusedUser !== prevState.focusedUser &&
+      this.state.scrollIntoView
+    ) {
       this.ensureFocusedItemVisible();
     }
   }
@@ -22,24 +26,35 @@ class List extends Component {
   }
 
   handleKeyPress = e => {
-    if (
-      this.state.focusedUser > -1 &&
-      this.state.focusedUser < this.props.users.length
-    ) {
-      // up arrow
-      if (e.keyCode === 38) {
-        this.setState(state => ({ focusedUser: state.focusedUser - 1 }));
-      }
-      // down arrow
-      if (e.keyCode === 40) {
-        this.setState(state => ({ focusedUser: state.focusedUser + 1 }));
-      }
+    // up arrow
+    this.setState({ scrollIntoView: true });
+    if (e.keyCode === 38) {
+      this.setState(state => {
+        const currentFocus = state.focusedUser;
+        const focusedUser = currentFocus <= 0 ? 0 : currentFocus - 1;
+        return {
+          focusedUser
+        };
+      });
+    }
+    // down arrow
+    if (e.keyCode === 40) {
+      this.setState(state => {
+        const currentFocus = state.focusedUser;
+        const focusedUser =
+          currentFocus >= this.props.users.length
+            ? this.props.users.length
+            : currentFocus + 1;
+        return {
+          focusedUser
+        };
+      });
     }
   };
 
   handleMouseEvent = id => {
     this.userRef.current && this.userRef.current.focus();
-    this.setState({ focusedUser: parseInt(id) });
+    this.setState({ focusedUser: parseInt(id), scrollIntoView: false });
   };
 
   render() {
