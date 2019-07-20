@@ -6,7 +6,7 @@ import Items from './Items';
 import Address from './Address';
 import './User.scss';
 
-const User = props => {
+const User = React.forwardRef((props, ref) => {
   const { id, name, items, address, pincode } = props.data;
   let classes = 'user';
   if (props.focused) {
@@ -19,6 +19,7 @@ const User = props => {
     <div
       tabIndex="0"
       id={props.divId}
+      ref={ref}
       className={classes}
       onKeyDown={props.handleKeyPress}
       onMouseMove={handleMouseEvent}
@@ -29,7 +30,7 @@ const User = props => {
       <Address address={address} pincode={pincode} />
     </div>
   );
-};
+});
 
 User.propTypes = {
   data: PropTypes.object.isRequired,

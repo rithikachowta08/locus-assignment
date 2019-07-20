@@ -6,36 +6,57 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      focusedUser: ''
+      focusedUser: 0
     };
+    this.userRef = React.createRef();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.focusedUser !== prevState.focusedUser) {
+      this.ensureFocusedItemVisible();
+    }
+  }
+
+  ensureFocusedItemVisible() {
+    this.userRef.current && this.userRef.current.scrollIntoView(false); // false aligns dom node to the bottom
   }
 
   handleKeyPress = e => {
-    const userDivs = document.getElementsByClassName('user');
-    const targetId = parseInt(e.target.id);
-    if (e.keyCode === 38) {
-      userDivs[targetId - 1] && userDivs[targetId - 1].focus();
-      this.setState({ focusedUser: targetId - 1 });
-    } else if (e.keyCode === 40) {
-      userDivs[targetId + 1] && userDivs[targetId + 1].focus();
-      this.setState({ focusedUser: targetId + 1 });
+    if (
+      this.state.focusedUser > -1 &&
+      this.state.focusedUser < this.props.users.length
+    ) {
+      // up arrow
+      if (e.keyCode === 38) {
+        this.setState(state => ({ focusedUser: state.focusedUser - 1 }));
+      }
+      // down arrow
+      if (e.keyCode === 40) {
+        this.setState(state => ({ focusedUser: state.focusedUser + 1 }));
+      }
     }
   };
 
   handleMouseEvent = id => {
+    this.userRef.current && this.userRef.current.focus();
     this.setState({ focusedUser: parseInt(id) });
   };
 
   render() {
-    const listElements = this.props.users.map((user, index) => (
-      <User
-        divId={index}
-        data={user}
-        focused={index === this.state.focusedUser}
-        handleKeyPress={this.handleKeyPress}
-        handleMouseEvent={this.handleMouseEvent}
-      />
-    ));
+    const listElements = this.props.users.map((user, index) => {
+      const focused = index === this.state.focusedUser;
+
+      return (
+        <User
+          divId={index}
+          data={user}
+          focused={focused}
+          ref={focused && this.userRef}
+          handleKeyPress={this.handleKeyPress}
+          handleMouseEvent={this.handleMouseEvent}
+        />
+      );
+    });
     return <div className="result-list">{listElements}</div>;
   }
 }
