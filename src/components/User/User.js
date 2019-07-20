@@ -18,25 +18,25 @@ const User = props => {
   return (
     <div
       tabIndex="0"
-      onKeyDown={props.handleKeyPress}
       id={props.divId}
-      onMouseEnter={handleMouseEvent}
       className={classes}
+      onKeyDown={props.handleKeyPress}
+      onMouseMove={handleMouseEvent}
     >
-      <Id id={id} onMouseEnter={handleMouseEvent} />
-      <Name name={name} onMouseEnter={handleMouseEvent} />
-      <Items items={items} onMouseEnter={handleMouseEvent} />
-      <Address
-        address={address}
-        pincode={pincode}
-        onMouseEnter={handleMouseEvent}
-      />
+      <Id id={id} />
+      <Name name={name} />
+      <Items items={items} />
+      <Address address={address} pincode={pincode} />
     </div>
   );
 };
 
 User.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  divId: PropTypes.number.isRequired,
+  focused: PropTypes.bool.isRequired,
+  handleKeyPress: PropTypes.func.isRequired,
+  handleMouseEvent: PropTypes.func.isRequired
 };
 
 export default User;
