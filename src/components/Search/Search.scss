@@ -2,10 +2,16 @@
   box-sizing: border-box;
   width: 500px;
   padding: 20px;
+  outline: none;
 
   .search-input{
     width: 100%;
     padding: 10px;
     outline: none;
+  }
+
+  .result-list{
+    max-height: 400px;
+    overflow: auto;
   }
 }

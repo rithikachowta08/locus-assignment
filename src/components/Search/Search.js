@@ -18,13 +18,42 @@ class Search extends Component {
     this.setState({ users });
   }
 
+  matchItems = (items, regexp) => {
+    let match = false;
+    items.forEach(item => {
+      if (item.search(regexp) > -1) {
+        match = true;
+      }
+    });
+    return match;
+  };
+
+  filterUsers = (users, regexp) => {
+    const filteredUsers = users.filter(
+      user =>
+        user.name.search(regexp) > -1 ||
+        user.id.search(regexp) > -1 ||
+        this.matchItems(user.items, regexp) ||
+        user.address.search(regexp) > -1 ||
+        user.pincode.search(regexp) > -1
+    );
+    return filteredUsers;
+  };
+
   filterByKeyword = e => {
-    this.setState({ currentInput: e.target.value });
+    const keyword = e.target.value;
+    this.setState({ currentInput: keyword });
+    if (keyword) {
+      const regexp = new RegExp(`${keyword}`, 'i');
+      this.setState({ users: this.filterUsers(users, regexp) });
+    } else {
+      this.setState({ users });
+    }
   };
 
   render() {
     const searchResults = this.state.users.length ? (
-      <List users={users} />
+      <List users={this.state.users} />
     ) : (
       <EmptyResult message="No users found" />
     );

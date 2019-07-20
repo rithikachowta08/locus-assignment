@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Items = props => {
-  return <div>{props.items}</div>;
+  return <div onMouseEnter={props.onMouseEnter}>{props.items}</div>;
 };
 
 Items.propTypes = {

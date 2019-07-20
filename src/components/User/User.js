@@ -1,17 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Header from './Header';
+import Id from './Id';
+import Name from './Name';
 import Items from './Items';
 import Address from './Address';
 import './User.scss';
 
 const User = props => {
   const { id, name, items, address, pincode } = props.data;
+  let classes = 'user';
+  if (props.focused) {
+    classes += ' focused';
+  }
+  const handleMouseEvent = () => {
+    props.handleMouseEvent(props.divId);
+  };
   return (
-    <div className="user">
-      <Header id={id} name={name} />
-      <Items items={items} />
-      <Address address={address} pincode={pincode} />
+    <div
+      tabIndex="0"
+      onKeyDown={props.handleKeyPress}
+      id={props.divId}
+      onMouseEnter={handleMouseEvent}
+      className={classes}
+    >
+      <Id id={id} onMouseEnter={handleMouseEvent} />
+      <Name name={name} onMouseEnter={handleMouseEvent} />
+      <Items items={items} onMouseEnter={handleMouseEvent} />
+      <Address
+        address={address}
+        pincode={pincode}
+        onMouseEnter={handleMouseEvent}
+      />
     </div>
   );
 };
