@@ -36,6 +36,7 @@ class List extends Component {
     if (e.keyCode === 38) {
       this.setState(state => {
         const currentFocus = state.focusedUser;
+        // if up key is pressed multiple times on first list item, keep first item highlighted
         const focusedUser = currentFocus <= 0 ? 0 : currentFocus - 1;
         return {
           focusedUser
@@ -44,13 +45,12 @@ class List extends Component {
     }
     // down arrow
     if (e.keyCode === 40) {
-      console.log(e.keyCode);
-
       this.setState(state => {
         const currentFocus = state.focusedUser;
+        // if down key is pressed multiple times on last list item, keep last item highlighted
         const focusedUser =
-          currentFocus >= this.props.users.length
-            ? this.props.users.length
+          currentFocus >= this.props.users.length - 1
+            ? this.props.users.length - 1
             : currentFocus + 1;
         return {
           focusedUser

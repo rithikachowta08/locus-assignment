@@ -53,6 +53,7 @@ class Search extends Component {
   };
 
   handleKeyPress = e => {
+    // to enable keyboard navigation when key is pressed while input is focused
     this.listRef.current && this.listRef.current.handleKeyPress(e);
   };
 
